@@ -10,12 +10,14 @@ const Assets = () => {
             setAssets(_assets);
         })
     }, []);
+    
     return (
         <div>
-            <h3>assets</h3>
+            <h3>내 보유재산</h3>
             {
                 assets.map(asset => {
-                    return (<div>
+                    return (
+                    <div>
                         {asset.symbol} : {asset.quantity}
                     </div>)
                 })

@@ -29,9 +29,23 @@ const get = async (url, query={}, extraHeaders={}) => {
     return await res.json();
 }
 
+const deleteCall = async (url, query={}, extraHeaders={}) => {
+    const res = await fetch(`${defaultUrl}/${url}`, {
+        method: 'DELETE',
+        headers: {...getDefaultHeaders(), ...extraHeaders}
+    });
+
+    return await res.json();
+}
+
 const login = async (name, password) => {
     return await post('login', {name, password});
 }
+
+const loginByKey = async (key) => {
+    return await post('login_by_key', key);
+}
+
 
 const loadAssets = async () => {
     return await get('assets');
@@ -47,6 +61,7 @@ const loadMarket = async(market) => {
 
 export {
     login,
+    loginByKey,
     loadMarket,
     loadMarkets,
     loadAssets,
