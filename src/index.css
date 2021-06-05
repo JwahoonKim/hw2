@@ -17,6 +17,13 @@ header {
   width: 80%;
   margin: 0 auto;
   justify-content: space-between;
+  align-items: center;
+}
+
+#contents {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .login-form {
@@ -35,7 +42,55 @@ header {
   display: flex;
 }
 
-#contents {
+.orderColumn {
   display: flex;
   flex-direction: row;
+}
+
+.tradeButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.marketButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.orderList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.buyOrderPrice {
+  width: 100px;
+  background-color: #F7FAFE;
+  color: #0051C7;
+  text-align: center;
+  margin-right: 3px;
+}
+
+.buyOrderQuantity {
+  width: 100px;
+  background-color: #F7FAFE;
+  color: #0051C7;
+  text-align: center;
+}
+
+.sellOrderPrice {
+  width: 100px;
+  background-color: #FDF6F7;
+  color: #0051C7;
+  text-align: center;
+  margin-right: 2px;
+}
+
+.sellOrderQuantity {
+  width: 100px;
+  background-color: #FDF6F7;
+  color: #0051C7;
+  text-align: center;
 }

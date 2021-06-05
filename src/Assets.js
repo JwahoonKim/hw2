@@ -17,7 +17,7 @@ const Assets = () => {
             {
                 assets.map(asset => {
                     return (
-                    <div>
+                    <div key={asset.id}>
                         {asset.symbol} : {asset.quantity}
                     </div>)
                 })

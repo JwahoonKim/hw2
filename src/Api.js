@@ -42,11 +42,6 @@ const login = async (name, password) => {
     return await post('login', {name, password});
 }
 
-const loginByKey = async (key) => {
-    return await post('login_by_key', key);
-}
-
-
 const loadAssets = async () => {
     return await get('assets');
 }
@@ -59,10 +54,29 @@ const loadMarket = async(market) => {
     return await get(`markets/${market}`);
 }
 
+const orders = async (price, quantity, marketName, side) => {
+    const body = {
+        'price': price,
+        'quantity': quantity,
+        'market': marketName,
+        'side': side
+    } 
+    return await post('orders', body);
+}
+
+const cancel = async (orderId) => {
+    return await deleteCall(`orders/${orderId}`);
+}
+
+// const keyLogin = async (key) => {
+//     return await post('login_by_key', {key: key});
+// }
+
 export {
     login,
-    loginByKey,
     loadMarket,
     loadMarkets,
     loadAssets,
+    orders,
+    // keyLogin,
 }

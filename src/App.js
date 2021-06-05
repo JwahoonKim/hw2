@@ -3,6 +3,9 @@ import { Button, ButtonGroup, TextField } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { loadMarket, loadMarkets } from './Api';
 import LoginForm from "./LoginForm";
+import Markets from "./Markets";
+import OrderBook from "./OrderBook";
+import Order from "./Order";
 import Assets from "./Assets";
 
 
@@ -10,7 +13,7 @@ function App() {
     const [isLoggedIn, setLogin] = useState(false);
     const [markets, setMarkets] = useState([]);
     const [market, setMarket] = useState(null);
-
+    
     const defaultMarket = 'snu-won';
 
     const handleLoginForm = () => {
@@ -20,7 +23,13 @@ function App() {
             setLogin(false);
     }
     
-// 마켓 정보 가져오기
+    const handleMarket = (clickedMaket) => {
+        loadMarket(clickedMaket)
+        .then(_market => {
+            setMarket(_market);
+        })
+    }
+    
     useEffect(() => {
       loadMarkets()
           .then(marketObjects => {
@@ -33,8 +42,15 @@ function App() {
             })
     }, []);
 
+    useEffect(() => {
+        if(localStorage.getItem('LOGIN_KEY')) {
+            setLogin(true)
+        }
+    }, []);
+
     return (
         <div>
+
             <header>
                 <div><h2>logo</h2></div>
                 <h2>SnuCoin 거래소</h2>
@@ -42,38 +58,34 @@ function App() {
                 <LoginForm isLoggedIn={ isLoggedIn } onClick={ handleLoginForm }/>
                 </div>
             </header>
-            <contents>
-                <div id="contents">
-                <div className="market">
-                    <ButtonGroup color="primary" aria-label="outlined primary button group">
-                    {markets.map(market =>
-                        <Button>{market.name}</Button>
-                    )}
-                    </ButtonGroup>
-                    {market &&
-                    <div className="market">
-                        <div id="orderBooks">
-                        {
-                            market.orderBook.buy.map(orderBook => {
-                                return (<div key={orderBook._id}>
-                                    {orderBook._id} : {orderBook.totalQuantity}
-                                </div>);
-                            })
-                        }
-                        </div>
-                        <div >
-                            <form className="create-order">
-                                <Button>Buy</Button><Button>Sell</Button>
-                                <TextField size="small" id="filled-basic" label="price" variant="filled" type="number" />
-                                <TextField size="small" id="filled-basic" label="quantity" variant="filled" type="number" />
-                                <Button type="submit">Order</Button>
-                            </form>
-                        </div>
+
+            <div id="contents">
+                <div className="tradeColumn">
+                    <div className="markets">
+                        <Markets onClick={ handleMarket } markets={ markets }/>
                     </div>
-                    }
+                    <div className="orderColumn">
+                        {market &&
+                            <div className="market">
+                                <OrderBook market={ market }/>
+                            </div>                  
+                        }
+                        {market &&
+                            <div className="orderBlock">
+                                <Order market={ market }/>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div className="infoColumn">
+                    <div className="Assets">
+                       <Assets/>
+                    </div>
+                    <div className="infoBox">
+
+                    </div>
                 </div>
             </div>
-            </contents>
         </div>
      );
 }
