@@ -66,31 +66,45 @@ header {
 }
 
 .buyOrderPrice {
-  width: 100px;
-  background-color: #F7FAFE;
+  width: 130px;
+  background-color: #FDF6F7;
   color: #0051C7;
   text-align: center;
   margin-right: 3px;
 }
 
 .buyOrderQuantity {
-  width: 100px;
-  background-color: #F7FAFE;
+  width: 130px;
+  background-color: #FDF6F7;
   color: #0051C7;
   text-align: center;
 }
 
 .sellOrderPrice {
-  width: 100px;
-  background-color: #FDF6F7;
+  width: 130px;
+  background-color: #F7FAFE;
   color: #0051C7;
   text-align: center;
   margin-right: 2px;
 }
 
 .sellOrderQuantity {
-  width: 100px;
-  background-color: #FDF6F7;
+  width: 130px;
+  background-color: #F7FAFE;
   color: #0051C7;
   text-align: center;
 }
+
+.orderBookInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.logout-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+

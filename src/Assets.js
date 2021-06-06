@@ -1,15 +1,5 @@
-import {useState, useEffect} from "react";
-import { loadAssets } from './Api';
-
-const Assets = () => {
-    const [assets, setAssets] = useState([]);
-
-    useEffect(() => {
-        loadAssets()
-        .then(_assets => {
-            setAssets(_assets);
-        })
-    }, []);
+const Assets = (props) => {
+    const assets = props.assets;
     
     return (
         <div>
@@ -17,8 +7,8 @@ const Assets = () => {
             {
                 assets.map(asset => {
                     return (
-                    <div key={asset.id}>
-                        {asset.symbol} : {asset.quantity}
+                    <div key={asset._id}>
+                        ★ {Math.floor(asset.quantity).toLocaleString()} {asset.symbol}
                     </div>)
                 })
             }
