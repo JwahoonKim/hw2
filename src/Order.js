@@ -20,7 +20,6 @@ const Order = (props) => {
         }
         else{
             alert("매수 주문을 하였습니다.");
-            console.log(_order)
             return _order;
         }
     }
@@ -30,7 +29,6 @@ const Order = (props) => {
         console.log("매도합니다")
 
         const _order = await orders(price, quantity, marketName, 'sell');
-        // console.log(_order)
         if(_order.error){
             alert("매도에 실패했습니다.");
         }

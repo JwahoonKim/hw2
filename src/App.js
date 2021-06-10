@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { loadMarket, loadMarkets, loadAssets, cancel, getOrders, login_by_key } from './Api';
+import { loadMarket, loadMarkets, loadAssets, cancel, getOrders } from './Api';
 import LoginForm from "./LoginForm";
 import Markets from "./Markets";
 import OrderBook from "./OrderBook";
@@ -8,19 +8,18 @@ import Order from "./Order";
 import Assets from "./Assets";
 import MyOrder from "./MyOrder";
 
-
 function App() {
-
+    
+    const LOGIN_KEY = "LOGIN_KEY";
+    const defaultMarketName = 'snu-won';
+    
     const [isLoggedIn, setLogin] = useState(false);
     const [markets, setMarkets] = useState([]);
     const [market, setMarket] = useState(null);
     const [assets, setAssets] = useState([]);
     const [myOrders, setMyOrders] = useState([]);
-    
-    const LOGIN_KEY = "LOGIN_KEY";
-    const defaultMarketName = 'snu-won';
-    const user = "60b6ead5273ee82845fb79fb";
-    
+    const [user, setUser] = useState(null);
+
     const handleLoginForm = () => {
         if(localStorage.getItem(LOGIN_KEY))
             setLogin(true);
@@ -49,7 +48,14 @@ function App() {
         })
     }
 
-    // 아직 미체결된 내 order를 가져오는 함수
+    const loadUser = () => {
+        loadAssets()
+        .then(_assets => {
+            setUser(_assets[0].user);
+        })
+    }
+
+    // 아직 미체결된 내 order들을 가져오는 함수
     const getMyOrders = () => {
         const _MyOrders = [];
         getOrders()
@@ -67,9 +73,9 @@ function App() {
         })
     }
 
-    useEffect( () => {
+    useEffect(() => {
         getMyOrders();
-    }, [])
+    })
 
     useEffect(() => {
       loadMarkets()
@@ -93,13 +99,17 @@ function App() {
         updateAssets();
     }, [isLoggedIn]);
 
+    useEffect(() => {
+        loadUser();
+    }, [isLoggedIn])
+
     // 5초마다 orderBook을 업데이트
     useEffect(() => {
         const interval = setInterval(() => {
             if(market && handleMarket(market.market.name));
         }, 5000);
         return () => clearInterval(interval);
-    })
+    }, [market])
 
     // 5초마다 Assets을 업데이트
     useEffect(() => {
@@ -107,7 +117,7 @@ function App() {
             if(isLoggedIn && updateAssets());
         }, 5000);
         return () => clearInterval(interval);
-    })
+    }, [market, isLoggedIn])
 
     // 5초마다 myOrder 업데이트
     useEffect(() => {
@@ -115,8 +125,7 @@ function App() {
             if(isLoggedIn && getMyOrders());
         }, 5000);
         return () => clearInterval(interval);
-    }, [market])
-
+    }, [market, isLoggedIn])
 
 
     return (

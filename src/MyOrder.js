@@ -6,7 +6,6 @@ const MyOrder = (props) => {
     const nowMarket = props.market.market.name;
     const mySellOrders = myOrders.filter( _order => (_order.side === "sell" && _order.market.name === nowMarket));
     const myBuyOrders = myOrders.filter( _order => (_order.side === "buy" && _order.market.name === nowMarket));
-    // console.log(myBuyOrders);
     const sortedMySellOrders = mySellOrders.sort( (a, b) => {
         return (a.price - b.price);
     })
