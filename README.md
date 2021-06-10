@@ -1,4 +1,6 @@
-# hw2
+![20210610234648](https://user-images.githubusercontent.com/72662822/121566413-72fc4400-ca58-11eb-8bf0-e291e42a9512.png)
+
+
 
 벤처창업 웹프로그래밍 II 중간과제II
 ========================
