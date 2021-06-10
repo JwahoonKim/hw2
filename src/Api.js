@@ -33,8 +33,7 @@ const deleteCall = async (url, query={}, extraHeaders={}) => {
     const res = await fetch(`${defaultUrl}/${url}`, {
         method: 'DELETE',
         mode: 'cors',
-        headers: {...getDefaultHeaders(), ...extraHeaders, 
-            'Access-Control-Allow-Origin': 'http://localhost:3000',}
+        headers: {...getDefaultHeaders(), ...extraHeaders}
     });
 
     return await res.json();
@@ -42,6 +41,10 @@ const deleteCall = async (url, query={}, extraHeaders={}) => {
 
 const login = async (name, password) => {
     return await post('login', {name, password});
+}
+
+const login_by_key = async (key) => {
+    return await post('login_by_key', {key});
 }
 
 const loadAssets = async () => {
@@ -54,6 +57,10 @@ const loadMarkets = async() => {
 
 const loadMarket = async(market) => {
     return await get(`markets/${market}`);
+}
+
+const getOrders = async () => {
+    return await get('orders');
 }
 
 const orders = async (price, quantity, marketName, side) => {
@@ -72,9 +79,11 @@ const cancel = async (orderId) => {
 
 export {
     login,
+    login_by_key,
     loadMarket,
     loadMarkets,
     loadAssets,
     orders,
     cancel,
+    getOrders,
 }

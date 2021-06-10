@@ -1,19 +1,27 @@
 import { Button, TextField } from "@material-ui/core";
-import { useState } from 'react';
-import { login } from './Api';
+import { useState, useEffect } from 'react';
+import { login, login_by_key } from './Api';
+
 
 const LOGIN_KEY = 'LOGIN_KEY';
 
 const LoginForm = (props) => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-
-    const ID = localStorage.getItem(LOGIN_KEY)
-    const userName = ID ? ID.split('@')[0] : null
     
+    const getMyName = () => {
+        if(props.isLoggedIn){
+            login_by_key(localStorage.getItem(LOGIN_KEY))
+            .then( _name => {
+                setName(_name.name.split('@')[0]);
+            })
+        }        
+    }
+
     const style = {
         marginBottom: '10px',
     }
+
     const onLogin = async (e) => {
         e.preventDefault();
         try{
@@ -23,7 +31,6 @@ const LoginForm = (props) => {
         } catch{
             failLogin();
         }
-
     }
 
     const Logout = () => {
@@ -35,10 +42,14 @@ const LoginForm = (props) => {
         alert("아이디 혹은 비밀번호를 다시 확인해주세요!")
     }
 
+    useEffect(() => {
+        getMyName();
+    }, [props.isLoggedIn])
+
     if(props.isLoggedIn){
         return (
             <div className="logout-form">
-              <div style={style}>{userName} 님 반가워요!</div>
+              <div style={style}>{name} 님 반가워요!</div>
               <Button type="submit" variant="contained" color="primary" size="large" onClick={ Logout }>Logout</Button>
             </div>
         );

@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
@@ -107,4 +108,46 @@ header {
   align-items: center;
 }
 
+.myOrder {
+  margin-left: 40px;
+}
 
+.myOrderInfo {
+  background-color: antiquewhite;
+  text-align: center;
+  height: 80px;
+  border-radius: 10px;
+  font-size: 15px;
+  
+}
+
+.myOrderTitle {
+  background-color: aliceblue;
+  text-align: center;
+  width: 405px;
+}
+
+.totalOrderBox {
+  display: flex;
+  flex-wrap: wrap;
+  width: 420px;
+}
+
+.myOrderBox {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  margin-right: 5px;  
+  width: 200px;
+  
+}
+
+
+.mySellInfo {
+  background-color: #709ee2;
+  
+}
+
+.myBuyInfo {
+  background-color: #f1cad0;
+}

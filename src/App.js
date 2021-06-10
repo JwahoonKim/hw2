@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { loadMarket, loadMarkets, loadAssets, cancel } from './Api';
+import { loadMarket, loadMarkets, loadAssets, cancel, getOrders, login_by_key } from './Api';
 import LoginForm from "./LoginForm";
 import Markets from "./Markets";
 import OrderBook from "./OrderBook";
@@ -15,15 +15,14 @@ function App() {
     const [markets, setMarkets] = useState([]);
     const [market, setMarket] = useState(null);
     const [assets, setAssets] = useState([]);
-    const [mySellOrder, setMySellOrder] = useState([]);
-    const [myBuyOrder, setMyBuyOrder] = useState([]);
-
+    const [myOrders, setMyOrders] = useState([]);
+    
+    const LOGIN_KEY = "LOGIN_KEY";
     const defaultMarketName = 'snu-won';
-    // console.log(myBuyOrder);
-    // console.log(mySellOrder);
-
+    const user = "60b6ead5273ee82845fb79fb";
+    
     const handleLoginForm = () => {
-        if(localStorage.getItem('LOGIN_KEY'))
+        if(localStorage.getItem(LOGIN_KEY))
             setLogin(true);
         else 
             setLogin(false);
@@ -38,9 +37,6 @@ function App() {
 
     const cancelOrder = (orderId) => {
         cancel(orderId)
-        .then(_market => {
-            setMarket(_market);
-        })
     }
     
     const updateAssets = () => {
@@ -53,16 +49,38 @@ function App() {
         })
     }
 
+    // 아직 미체결된 내 order를 가져오는 함수
+    const getMyOrders = () => {
+        const _MyOrders = [];
+        getOrders()
+        .then(_orders => {
+            _orders.forEach((_order) => {
+                if(_order.status === 0){
+                    if(_order.user === user){
+                        if(_order.remainQuantity > 0){
+                            _MyOrders.push(_order);
+                        }
+                    }
+                }
+            } )
+            setMyOrders(_MyOrders);
+        })
+    }
+
+    useEffect( () => {
+        getMyOrders();
+    }, [])
+
     useEffect(() => {
       loadMarkets()
-          .then(marketObjects => {
-              setMarkets(Object.keys(marketObjects).map(key => marketObjects[key]));
-            })
+        .then(marketObjects => {
+            setMarkets(Object.keys(marketObjects).map(key => marketObjects[key]));
+        })
 
-      loadMarket(defaultMarketName)
+     loadMarket(defaultMarketName)
         .then(_market => {
             setMarket(_market);
-            })
+        })
     }, []);
 
     useEffect(() => {
@@ -74,14 +92,6 @@ function App() {
     useEffect(() => {
         updateAssets();
     }, [isLoggedIn]);
-
-    useEffect(() => {
-        localStorage.setItem('BUY_ORDER', JSON.stringify(myBuyOrder));
-    }, [myBuyOrder])
-
-    useEffect(() => {
-        localStorage.setItem('SELL_ORDER', JSON.stringify(mySellOrder));
-    }, [mySellOrder])
 
     // 5초마다 orderBook을 업데이트
     useEffect(() => {
@@ -100,6 +110,13 @@ function App() {
     })
 
     // 5초마다 myOrder 업데이트
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(isLoggedIn && getMyOrders());
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [market])
+
 
 
     return (
@@ -127,10 +144,9 @@ function App() {
                         {market &&
                         <>
                             <div className="orderBlock">
-                                <Order market={ market } mySellOrder={ mySellOrder } setMySellOrder={ setMySellOrder }
-                                myBuyOrder={ myBuyOrder } setMyBuyOrder={ setMyBuyOrder }/>
+                                <Order market={ market }/>
                             </div>
-                            <MyOrder market={ market } mySellOrder={ mySellOrder } myBuyOrder={ myBuyOrder }/>
+                            <MyOrder market={ market } myOrders={ myOrders } cancelOrder={ cancelOrder } isLoggedIn={ isLoggedIn }/>
                         </>
                         }
                     </div>
